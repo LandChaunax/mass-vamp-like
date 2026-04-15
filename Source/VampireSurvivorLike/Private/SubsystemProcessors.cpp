@@ -87,7 +87,7 @@ void UCollisionProcessor::Execute(FMassEntityManager& EntityManager, FMassExecut
 		{
 			FTransformFragment TransformFragment = TransformFragmentView[EntityIt];
 			FVector Location = TransformFragment.GetTransform().GetLocation();
-			TArray<FMassEntityHandle> NearEntities = SmbSubsystem.Query(Location,210);
+			TArray<FMassEntityHandle> NearEntities = SmbSubsystem.Query(Location,510);
 			
 			//UE_LOG(LogTemp, Display, TEXT("NearEntities: %i"), NearEntities.Num())
 			
@@ -99,14 +99,15 @@ void UCollisionProcessor::Execute(FMassEntityManager& EntityManager, FMassExecut
 					continue;
 				}
 				FVector OtherLocation = OtherTransformFragment->GetTransform().GetLocation();
-				float Distance = (Location - OtherLocation).Size();
-				if (Distance >= 100.f)
+				FVector RelativeLocation = (OtherLocation-Location);
+				float Distance = RelativeLocation.Size();
+				if (Distance >= 80.f)
 				{
 					continue;
 				}
-				FVector PushDistance = (OtherLocation-Location).GetSafeNormal();
-				PushDistance.Z = 0.f;
-				PushDistance *= 150.f*DeltaTime;
+				RelativeLocation.Z = 0.f;
+				FVector PushDistance = RelativeLocation*(50/FMath::Max(Distance,0.1f));
+				PushDistance *= DeltaTime;
 				
 				OtherTransformFragment->GetMutableTransform().SetLocation(OtherLocation+PushDistance);
 			}

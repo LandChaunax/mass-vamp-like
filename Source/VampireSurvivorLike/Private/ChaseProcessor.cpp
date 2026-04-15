@@ -16,7 +16,7 @@ UChaseProcessor::UChaseProcessor()
 {
 	ExecutionFlags = static_cast<int32>(EProcessorExecutionFlags::Client | EProcessorExecutionFlags::Standalone);
 	ExecutionOrder.ExecuteInGroup = UE::Mass::ProcessorGroupNames::Tasks;
-	ExecutionOrder.ExecuteAfter.Add(UE::Mass::ProcessorGroupNames::Representation);
+	ExecutionOrder.ExecuteBefore.Add(UE::Mass::ProcessorGroupNames::Representation);
 }
 
 void UChaseProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>& EntityManager)
