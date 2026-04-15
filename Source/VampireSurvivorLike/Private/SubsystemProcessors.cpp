@@ -106,7 +106,7 @@ void UCollisionProcessor::Execute(FMassEntityManager& EntityManager, FMassExecut
 				}
 				FVector PushDistance = (OtherLocation-Location).GetSafeNormal();
 				PushDistance.Z = 0.f;
-				PushDistance *= 90.f*DeltaTime;
+				PushDistance *= 150.f*DeltaTime;
 				
 				OtherTransformFragment->GetMutableTransform().SetLocation(OtherLocation+PushDistance);
 			}

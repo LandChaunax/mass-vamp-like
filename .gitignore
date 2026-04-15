@@ -46,6 +46,8 @@
 SourceArt/**/*.png
 SourceArt/**/*.tga
 
+.idea/*
+
 # Binary Files
 Binaries/*
 Plugins/**/Binaries/*
