@@ -24,7 +24,7 @@ void AChaseManager::Tick(float DeltaTime)
 
 	FMassEntityManager* EntityManger = UE::Mass::Utils::GetEntityManager(GetWorld());
 	if (!EntityManger) return;
-	if (!EntityManger->IsEntityValid(FMassEntityHandle(1,1))) return;
+	if (!EntityManger->IsEntityValid(FMassEntityHandle(2,1))) return;
 	FChaseFragment* ChaseFragment = EntityManger->GetSharedFragmentDataPtr<FChaseFragment>(FMassEntityHandle(1,1));
 	if (ChaseFragment)
 	{

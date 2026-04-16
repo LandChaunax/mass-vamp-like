@@ -46,6 +46,12 @@ struct FLocationRegistrationFragment : public FMassFragment
 	UPROPERTY()
 	float CurrentRegistrationTimer = 0.f;
 	
+	UPROPERTY(EditAnywhere, Category = "Vamp")
+	float PushStrength = 50.f;
+	
+	UPROPERTY(EditAnywhere, Category = "Vamp")
+	float PushRadius = 80.f;
+	
 	FLocationRegistrationFragment GetValidated() const
 	{
 		FLocationRegistrationFragment Copy = *this;

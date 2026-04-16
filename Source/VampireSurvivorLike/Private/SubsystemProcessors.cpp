@@ -71,6 +71,7 @@ void UCollisionProcessor::ConfigureQueries(const TSharedRef<FMassEntityManager>&
 {
 	EntityQuery.AddRequirement<FTransformFragment>(EMassFragmentAccess::ReadWrite);
 	EntityQuery.AddSubsystemRequirement<USurvivorSubsystem>(EMassFragmentAccess::ReadOnly);
+	EntityQuery.AddRequirement<FLocationRegistrationFragment>(EMassFragmentAccess::ReadOnly);
 }
 
 void UCollisionProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
@@ -82,6 +83,7 @@ void UCollisionProcessor::Execute(FMassEntityManager& EntityManager, FMassExecut
 		
 		//ConstArrayView is used for read only, which allows Mass to decide when to run what more efficiently.
 		TArrayView<FTransformFragment> TransformFragmentView = Context.GetMutableFragmentView<FTransformFragment>();
+		const TConstArrayView<FLocationRegistrationFragment> LocationRegistrationView = Context.GetFragmentView<FLocationRegistrationFragment>();
 		
 		for (FMassExecutionContext::FEntityIterator EntityIt = Context.CreateEntityIterator(); EntityIt; ++EntityIt)
 		{
@@ -98,15 +100,18 @@ void UCollisionProcessor::Execute(FMassEntityManager& EntityManager, FMassExecut
 				{
 					continue;
 				}
+				
+				FLocationRegistrationFragment LocationRegistrationFragment = LocationRegistrationView[EntityIt];
+				
 				FVector OtherLocation = OtherTransformFragment->GetTransform().GetLocation();
 				FVector RelativeLocation = (OtherLocation-Location);
 				float Distance = RelativeLocation.Size();
-				if (Distance >= 80.f)
+				if (Distance >= LocationRegistrationFragment.PushRadius)
 				{
 					continue;
 				}
 				RelativeLocation.Z = 0.f;
-				FVector PushDistance = RelativeLocation*(50/FMath::Max(Distance,0.1f));
+				FVector PushDistance = RelativeLocation*(LocationRegistrationFragment.PushStrength/FMath::Max(Distance,0.1f));
 				PushDistance *= DeltaTime;
 				
 				OtherTransformFragment->GetMutableTransform().SetLocation(OtherLocation+PushDistance);
