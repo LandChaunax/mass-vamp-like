@@ -21,7 +21,7 @@ struct FGridCell
 FORCEINLINE uint32 GetTypeHash(const FGridCell& Cell)
 {
 	//X location gets put on top of Y location.
-	return (uint32)((int32)Cell.X << 16 | Cell.Y);
+	return ((uint32)(uint16)Cell.X << 16) | (uint16)Cell.Y;
 }
 
 template<>
